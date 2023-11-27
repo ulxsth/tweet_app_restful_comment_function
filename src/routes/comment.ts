@@ -85,7 +85,7 @@ commentRouter.patch("/:commentId", async (req, res, next) => {
 
   const { content } = req.body;
   comment.content = content;
-  comment.save();
+  comment.update();
 
   req.dialogMessage?.setMessage("Comment successfully updated");
   res.redirect(`/posts/${comment.postId}`);
