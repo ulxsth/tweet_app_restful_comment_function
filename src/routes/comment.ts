@@ -1,31 +1,30 @@
-import { Comment } from "@/models/comment";
-import { Post } from "@/models/post";
+import {Comment} from "@/models/comment";
+import {Post} from "@/models/post";
 import express from "express";
 
 export const commentRouter = express.Router();
 
-commentRouter.post("/:postId",
-  async (req, res, next) => {
-    const currentUserId = req.authentication?.currentUserId;
+commentRouter.post("/:postId", async (req, res, next) => {
+  const currentUserId = req.authentication?.currentUserId;
 
-    if (currentUserId === undefined) {
-      res.redirect("/401");
-      return;
-    }
+  if (currentUserId === undefined) {
+    res.redirect("/401");
+    return;
+  }
 
-    const { postId } = req.params;
-    if (postId === undefined || Post.find(Number(postId)) === undefined) {
-      res.redirect("/404");
-      return;
-    }
+  const {postId} = req.params;
+  if (postId === undefined || Post.find(Number(postId)) === undefined) {
+    res.redirect("/404");
+    return;
+  }
 
-    const { content } = req.body;
-    const comment = new Comment(currentUserId, Number(postId), content);
-    comment.save();
+  const {content} = req.body;
+  const comment = new Comment(currentUserId, Number(postId), content);
+  comment.save();
 
-    req.dialogMessage?.setMessage("Comment successfully created");
-    res.redirect(`/posts/${postId}`);
-  });
+  req.dialogMessage?.setMessage("Comment successfully created");
+  res.redirect(`/posts/${postId}`);
+});
 
 commentRouter.get("/:commentId/edit", async (req, res, next) => {
   const currentUserId = req.authentication?.currentUserId;
@@ -35,8 +34,11 @@ commentRouter.get("/:commentId/edit", async (req, res, next) => {
     return;
   }
 
-  const { commentId } = req.params;
-  if (commentId === undefined || Comment.find(Number(commentId)) === undefined) {
+  const {commentId} = req.params;
+  if (
+    commentId === undefined ||
+    Comment.find(Number(commentId)) === undefined
+  ) {
     res.redirect("/404");
     return;
   }
@@ -66,8 +68,11 @@ commentRouter.patch("/:commentId", async (req, res, next) => {
     return;
   }
 
-  const { commentId } = req.params;
-  if (commentId === undefined || Comment.find(Number(commentId)) === undefined) {
+  const {commentId} = req.params;
+  if (
+    commentId === undefined ||
+    Comment.find(Number(commentId)) === undefined
+  ) {
     res.redirect("/404");
     return;
   }
@@ -83,7 +88,7 @@ commentRouter.patch("/:commentId", async (req, res, next) => {
     return;
   }
 
-  const { content } = req.body;
+  const {content} = req.body;
   comment.content = content;
   comment.update();
 
@@ -99,8 +104,11 @@ commentRouter.delete("/:commentId", async (req, res, next) => {
     return;
   }
 
-  const { commentId } = req.params;
-  if (commentId === undefined || Comment.find(Number(commentId)) === undefined) {
+  const {commentId} = req.params;
+  if (
+    commentId === undefined ||
+    Comment.find(Number(commentId)) === undefined
+  ) {
     res.redirect("/404");
     return;
   }
