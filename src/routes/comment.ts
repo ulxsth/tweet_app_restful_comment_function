@@ -8,13 +8,13 @@ commentRouter.post("/:postId", async (req, res, next) => {
   const currentUserId = req.authentication?.currentUserId;
 
   if (currentUserId === undefined) {
-    res.redirect("/401");
+    res.render("401");
     return;
   }
 
   const {postId} = req.params;
-  if (postId === undefined || Post.find(Number(postId)) === undefined) {
-    res.redirect("/404");
+  if (Post.find(Number(postId)) === undefined) {
+    res.render("404");
     return;
   }
 
@@ -30,7 +30,7 @@ commentRouter.get("/:commentId/edit", async (req, res, next) => {
   const currentUserId = req.authentication?.currentUserId;
 
   if (currentUserId === undefined) {
-    res.redirect("/401");
+    res.render("401");
     return;
   }
 
@@ -39,18 +39,18 @@ commentRouter.get("/:commentId/edit", async (req, res, next) => {
     commentId === undefined ||
     Comment.find(Number(commentId)) === undefined
   ) {
-    res.redirect("/404");
+    res.render("404");
     return;
   }
 
   const comment = await Comment.find(Number(commentId));
   if (comment === undefined) {
-    res.redirect("/404");
+    res.render("404");
     return;
   }
 
   if (comment.userId !== currentUserId) {
-    res.redirect("/403");
+    res.render("403");
     return;
   }
 
@@ -64,7 +64,7 @@ commentRouter.patch("/:commentId", async (req, res, next) => {
   const currentUserId = req.authentication?.currentUserId;
 
   if (currentUserId === undefined) {
-    res.redirect("/401");
+    res.render("401");
     return;
   }
 
@@ -73,18 +73,18 @@ commentRouter.patch("/:commentId", async (req, res, next) => {
     commentId === undefined ||
     Comment.find(Number(commentId)) === undefined
   ) {
-    res.redirect("/404");
+    res.render("404");
     return;
   }
 
   const comment = await Comment.find(Number(commentId));
   if (comment === undefined) {
-    res.redirect("/404");
+    res.render("404");
     return;
   }
 
   if (comment.userId !== currentUserId) {
-    res.redirect("/403");
+    res.render("403");
     return;
   }
 
@@ -100,7 +100,7 @@ commentRouter.delete("/:commentId", async (req, res, next) => {
   const currentUserId = req.authentication?.currentUserId;
 
   if (currentUserId === undefined) {
-    res.redirect("/401");
+    res.render("401");
     return;
   }
 
@@ -109,18 +109,18 @@ commentRouter.delete("/:commentId", async (req, res, next) => {
     commentId === undefined ||
     Comment.find(Number(commentId)) === undefined
   ) {
-    res.redirect("/404");
+    res.render("404");
     return;
   }
 
   const comment = await Comment.find(Number(commentId));
   if (comment === undefined) {
-    res.redirect("/404");
+    res.render("404");
     return;
   }
 
   if (comment.userId !== currentUserId) {
-    res.redirect("/403");
+    res.render("403");
     return;
   }
 
