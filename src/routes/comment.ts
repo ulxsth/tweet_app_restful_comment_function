@@ -3,13 +3,14 @@ import express from "express";
 
 export const commentRouter = express.Router();
 
-commentRouter.post("/", (req, res, next) => {
+commentRouter.post("/:postId", async (req, res, next) => {
   const currentUserId = req.authentication?.currentUserId;
   if (currentUserId === undefined) {
     return next(new Error("Invalid error: currentUserId is undefined."));
   }
-  const { postId, content } = req.body;
-  const comment = new Comment(currentUserId, postId, content);
+  const { postId } = req.params;
+  const { content } = req.body;
+  const comment = new Comment(currentUserId, Number(postId), content);
   comment.save();
   res.redirect(`/posts/${postId}`);
 });
