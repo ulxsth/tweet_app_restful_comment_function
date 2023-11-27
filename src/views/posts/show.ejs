@@ -34,7 +34,7 @@
         </div>
       <% } %>
       <div class="comments-new">
-        <form action="/posts/<%= post.id %>/comments" method=POST data-test="form">
+        <form action="/comments/<%= post.id %>" method=POST data-test="form">
           <div class="comments-form">
             <textarea name="content" data-test="textarea-content" required></textarea>
             <input type="submit" value="Comment" data-test="submit">
