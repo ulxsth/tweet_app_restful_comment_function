@@ -42,7 +42,7 @@ commentRouter.get("/:commentId/edit", async (req, res, next) => {
   }
 
   const comment = await Comment.find(Number(commentId));
-  if (comment === undefined || comment.userId !== currentUserId) {
+  if (comment === undefined) {
     res.redirect("/404");
     return;
   }
@@ -73,7 +73,7 @@ commentRouter.patch("/:commentId", async (req, res, next) => {
   }
 
   const comment = await Comment.find(Number(commentId));
-  if (comment === undefined || comment.userId !== currentUserId) {
+  if (comment === undefined) {
     res.redirect("/404");
     return;
   }
@@ -88,5 +88,35 @@ commentRouter.patch("/:commentId", async (req, res, next) => {
   comment.update();
 
   req.dialogMessage?.setMessage("Comment successfully updated");
+  res.redirect(`/posts/${comment.postId}`);
+});
+
+commentRouter.delete("/:commentId", async (req, res, next) => {
+  const currentUserId = req.authentication?.currentUserId;
+
+  if (currentUserId === undefined) {
+    res.redirect("/401");
+    return;
+  }
+
+  const { commentId } = req.params;
+  if (commentId === undefined || Comment.find(Number(commentId)) === undefined) {
+    res.redirect("/404");
+    return;
+  }
+
+  const comment = await Comment.find(Number(commentId));
+  if (comment === undefined) {
+    res.redirect("/404");
+    return;
+  }
+
+  if (comment.userId !== currentUserId) {
+    res.redirect("/403");
+    return;
+  }
+
+  comment.delete();
+  req.dialogMessage?.setMessage("Comment successfully deleted");
   res.redirect(`/posts/${comment.postId}`);
 });
